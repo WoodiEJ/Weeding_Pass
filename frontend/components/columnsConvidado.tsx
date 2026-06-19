@@ -21,7 +21,7 @@ export type Convidado = {
     presenca: boolean
 }
 
-export function AcoesConvidado({ id, className }: { id: string, className: string }) {
+export function AcoesConvidado({ id, presenca }: { id: string, presenca: boolean }) {
     const router = useRouter()
 
     async function deletar() {
@@ -89,8 +89,13 @@ export function AcoesConvidado({ id, className }: { id: string, className: strin
         })
     }
 
+    const usuarioCheck = presenca === true ? "bg-green-700" : ""
+
     return (
         <div className="flex gap-2">
+            <Button variant="outline" onClick={marcarPresenca} className={usuarioCheck}>
+                <Check />
+            </Button>
             <Button size="sm" variant="outline" onClick={verConvidado}>
                 <Eye />
             </Button>
@@ -141,36 +146,9 @@ export const columnConvidado: ColumnDef<Convidado>[] = [
         id: "acoes",
         header: "Ações",
         cell: ({ row }) => {
-            async function marcarPresenca() {
-                toast.warning("Quer marcar a presença desse convidado?", {
-                    action: {
-                        label: "Sim",
-                        onClick: async () => {
-                            const toastId = toast.loading("Marcando presença...")
-                            const result = await checkinConvidado(row.original.id)
-                            if (!result.success) {
-                                toast.error("Erro ao atualizar.", {
-                                    description: result.mensagem,
-                                    id: toastId
-                                })
-                                return
-                            }
-                            toast.success("Atualizado com sucesso.", { id: toastId })
-                        }
-                    },
-                    cancel: {
-                        label: "Cancelar",
-                        onClick: () => { }
-                    }
-                })
-            }
-            const usuarioCheck = row.original.presenca === true ? "bg-green-700" : ""
             return (
                 <div className="flex gap-2">
-                    <Button variant="outline" onClick={marcarPresenca} className={usuarioCheck}>
-                        <Check />
-                    </Button>
-                    <AcoesConvidado id={row.original.id} className="" />
+                    <AcoesConvidado id={row.original.id} presenca={row.original.presenca} />
                     <DialogAtualizarConvidado
                         id={row.original.id}
                         dados={{
