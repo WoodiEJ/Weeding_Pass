@@ -72,7 +72,7 @@ export function AcoesConvidado({ id, presenca }: { id: string, presenca: boolean
                     const toastId = toast.loading("Marcando presença...")
                     const result = await checkinConvidado(id)
                     if (!result.success) {
-                        toast.error("Erro ao atualizar.", {
+                        toast.error("Erro ao marcar presença.", {
                             description: result.mensagem,
                             id: toastId
                         })
