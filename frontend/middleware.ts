@@ -17,7 +17,10 @@ export function middleware(req: NextRequest) {
         if (payload.role === 'RECEP') {
             return NextResponse.redirect(new URL("/recep/dashboard", req.url))
         }
-        return NextResponse.redirect(new URL("/admin/dashboard", req.url))
+        if (payload.role === 'ADMIN') {
+            return NextResponse.redirect(new URL("/admin/dashboard", req.url));
+        }
+        return NextResponse.next();
     }
 
     if (!token) {

@@ -17,6 +17,8 @@ import { dadoUsuario } from "@/actions/usuarios"
 import { MdEmail } from "react-icons/md"
 import { GiRingBox } from "react-icons/gi"
 import { FieldSeparator } from "./ui/field"
+import { BotaoGerarRelatorio } from "./pdfBtn"
+import { listarConvidados } from "@/actions/convidados"
 
 const navAdmin = [
   { title: "Dashboard", url: "/admin/dashboard", icon: <LayoutDashboardIcon /> },
@@ -32,6 +34,7 @@ const navRecep = [
 export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const usuario = await dadoUsuario()
   const navMain = usuario.role === "ADMIN" ? navAdmin : navRecep
+  const convidados = await listarConvidados()
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -55,9 +58,8 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
         {usuario.role === "ADMIN" ? (
           <SidebarGroup>
             <h1>Documentos</h1>
-            <SidebarMenuButton  className="m-2">
-              <File />
-              Relátorios
+            <SidebarMenuButton className="m-2">
+              <BotaoGerarRelatorio convidados={convidados} />
             </SidebarMenuButton>
           </SidebarGroup>
         ) : null}
