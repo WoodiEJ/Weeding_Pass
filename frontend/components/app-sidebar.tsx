@@ -6,6 +6,7 @@ import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
+  SidebarGroup,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -15,12 +16,12 @@ import { LayoutDashboardIcon, ListIcon, ChartBarIcon, FolderIcon, UsersIcon, Cam
 import { dadoUsuario } from "@/actions/usuarios"
 import { MdEmail } from "react-icons/md"
 import { GiRingBox } from "react-icons/gi"
+import { FieldSeparator } from "./ui/field"
 
 const navAdmin = [
   { title: "Dashboard", url: "/admin/dashboard", icon: <LayoutDashboardIcon /> },
   { title: "Usuários", url: "/admin/usuarios", icon: <Users /> },
-  { title: "Convidados", url: "/admin/convidados", icon: <MdEmail /> },
-  { title: "Relatorios", url: "/admin/relatorios", icon: <File /> },
+  { title: "Convidados", url: "/admin/convidados", icon: <MdEmail /> }
 ]
 
 const navRecep = [
@@ -51,6 +52,15 @@ export async function AppSidebar({ ...props }: React.ComponentProps<typeof Sideb
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMain} />
+        {usuario.role === "ADMIN" ? (
+          <SidebarGroup>
+            <h1>Documentos</h1>
+            <SidebarMenuButton  className="m-2">
+              <File />
+              Relátorios
+            </SidebarMenuButton>
+          </SidebarGroup>
+        ) : null}
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

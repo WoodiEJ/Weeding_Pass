@@ -31,7 +31,7 @@ export default async function VerConvidado({ params }: { params: Promise<{ id: s
                     </div>
                 </CardContent>
                 <CardFooter>
-                    <Link href={"/admin/usuarios"}>
+                    <Link href={"/recep/convidados"}>
                         <Button>Voltar</Button>
                     </Link>
                 </CardFooter>

@@ -20,6 +20,7 @@ import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { useRouter } from "next/navigation"
 
 const schema = z.object({
     nome: z.string().min(6, "Nome inválido."),
@@ -32,17 +33,19 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export function DialogCriarUsuario() {
+    const router = useRouter()
     const { register, control, handleSubmit, formState: { errors } } = useForm<FormData>({ resolver: zodResolver(schema) })
     const onSubmit = async (data: FormData) => {
         toast.warning("Confirme a criação", {
             action: {
                 label: "Confirmar",
                 onClick: async () => {
-                    const toastId = toast.loading("Atualizando...")
+                    const toastId = toast.loading("Criando...")
                     const result = await criarUsuario(data)
-                    if (result.success) {
-                        toast.success("Atualizado com sucesso.", { id: toastId })
-                    } else {
+                    if (result.success === true) {
+                        toast.success("Usuario criado com sucesso.", { id: toastId })
+                        router.refresh()
+                    } else if (result.success === false) {
                         toast.error(result.mensagem, { id: toastId })
                     }
                 }
@@ -56,11 +59,11 @@ export function DialogCriarUsuario() {
 
     return (
         <Dialog>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <DialogTrigger asChild>
-                    <Button>Criar Usuario Novo</Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-sm">
+            <DialogTrigger asChild>
+                <Button>Criar Usuario Novo</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-sm">
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <DialogHeader className="border-b pb-5">
                         <DialogTitle>Criar Usuario Novo</DialogTitle>
                     </DialogHeader>
@@ -103,8 +106,8 @@ export function DialogCriarUsuario() {
                         </DialogClose>
                         <Button type="submit">Criar</Button>
                     </DialogFooter>
-                </DialogContent>
-            </form>
+                </form>
+            </DialogContent>
         </Dialog>
     )
 }

@@ -6,7 +6,7 @@ import { toast } from "sonner"
 import { Button } from "./ui/button"
 import { Check, Eye, Trash } from "lucide-react"
 import { DialogAtualizarUsuario } from "./dialog-atualizar-usuario"
-import { checkinConvidado, deletarConvidado } from "@/actions/convidados"
+import { buscarConvidado, checkinConvidado, deletarConvidado } from "@/actions/convidados"
 import { dadoUsuario } from "@/actions/usuarios"
 import { DialogAtualizarConvidado } from "./dialog-atualizar-convidado"
 
@@ -21,7 +21,7 @@ export type Convidado = {
     presenca: boolean
 }
 
-export function AcoesConvidado({ id }: { id: string }) {
+export function AcoesConvidado({ id, className }: { id: string, className: string }) {
     const router = useRouter()
 
     async function deletar() {
@@ -91,16 +91,13 @@ export function AcoesConvidado({ id }: { id: string }) {
 
     return (
         <div className="flex gap-2">
-            <Button size="sm" className="bg-green-700" onClick={marcarPresenca}>
-                <Check />
-            </Button>
             <Button size="sm" variant="outline" onClick={verConvidado}>
                 <Eye />
             </Button>
             <Button size="sm" variant="destructive" onClick={deletar}>
                 <Trash />
             </Button>
-        </div>
+        </div >
     )
 }
 
@@ -131,7 +128,7 @@ export const columnConvidado: ColumnDef<Convidado>[] = [
     },
     {
         accessorKey: "numero_mesa",
-        header: "TNumero da Mesa",
+        header: "Numero da Mesa",
     },
     {
         accessorKey: "presenca",
@@ -144,9 +141,36 @@ export const columnConvidado: ColumnDef<Convidado>[] = [
         id: "acoes",
         header: "Ações",
         cell: ({ row }) => {
+            async function marcarPresenca() {
+                toast.warning("Quer marcar a presença desse convidado?", {
+                    action: {
+                        label: "Sim",
+                        onClick: async () => {
+                            const toastId = toast.loading("Marcando presença...")
+                            const result = await checkinConvidado(row.original.id)
+                            if (!result.success) {
+                                toast.error("Erro ao atualizar.", {
+                                    description: result.mensagem,
+                                    id: toastId
+                                })
+                                return
+                            }
+                            toast.success("Atualizado com sucesso.", { id: toastId })
+                        }
+                    },
+                    cancel: {
+                        label: "Cancelar",
+                        onClick: () => { }
+                    }
+                })
+            }
+            const usuarioCheck = row.original.presenca === true ? "bg-green-700" : ""
             return (
                 <div className="flex gap-2">
-                    <AcoesConvidado id={row.original.id} />
+                    <Button variant="outline" onClick={marcarPresenca} className={usuarioCheck}>
+                        <Check />
+                    </Button>
+                    <AcoesConvidado id={row.original.id} className="" />
                     <DialogAtualizarConvidado
                         id={row.original.id}
                         dados={{

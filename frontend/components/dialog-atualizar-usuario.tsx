@@ -19,6 +19,7 @@ import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select"
+import { useRouter } from "next/navigation"
 
 const schema = z.object({
     nome: z.string().min(6, "Nome inválido."),
@@ -31,6 +32,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export function DialogAtualizarUsuario({ id, dados }: { id: string, dados: FormData }) {
+    const router = useRouter()
     const { register, control, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -50,8 +52,11 @@ export function DialogAtualizarUsuario({ id, dados }: { id: string, dados: FormD
                     const result = await atualizarUsuario(id, data)
                     if (result.success) {
                         toast.success("Atualizado com sucesso.", { id: toastId })
+                        router.refresh()
+                        return result
                     } else {
                         toast.error(result.mensagem, { id: toastId })
+                        router.refresh()
                     }
                 }
             },

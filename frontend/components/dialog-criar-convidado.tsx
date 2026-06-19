@@ -38,10 +38,10 @@ export function DialogCriarConvidado() {
             action: {
                 label: "Confirmar",
                 onClick: async () => {
-                    const toastId = toast.loading("Atualizando...")
+                    const toastId = toast.loading("Registrando...")
                     const result = await registrarConvidado(data)
                     if (result.success) {
-                        toast.success("Atualizado com sucesso.", { id: toastId })
+                        toast.success("Convidado registrado com sucesso.", { id: toastId })
                         return result
                     } else {
                         toast.error(result.mensagem, { id: toastId })
@@ -94,7 +94,7 @@ export function DialogCriarConvidado() {
                         </Field>
                         <Field>
                             <Label>Numero Da Mesa</Label>
-                            <Input id="numero_mesa" {...register("numero_mesa")} />
+                            <Input id="numero_mesa" {...register("numero_mesa", { valueAsNumber: true })} />
                             <p>{errors.numero_mesa?.message}</p>
                         </Field>
                     </FieldGroup>
