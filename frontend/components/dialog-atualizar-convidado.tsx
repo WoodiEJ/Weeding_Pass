@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
 import { atualizarConvidado } from "@/actions/convidados"
+import { useRouter } from "next/navigation"
 
 const schema = z.object({
     nome: z.string().min(3, "Nome inválido."),
@@ -30,6 +31,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>
 
 export function DialogAtualizarConvidado({ id, dados }: { id: string, dados: FormData }) {
+    const router = useRouter()
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -50,6 +52,7 @@ export function DialogAtualizarConvidado({ id, dados }: { id: string, dados: For
                     const result = await atualizarConvidado(id, data)
                     if (result.success) {
                         toast.success("Atualizado com sucesso.", { id: toastId })
+                        router.refresh()
                         return result
                     } else {
                         toast.error(result.mensagem, { id: toastId })
@@ -102,7 +105,7 @@ export function DialogAtualizarConvidado({ id, dados }: { id: string, dados: For
                         </Field>
                         <Field>
                             <Label>Numero Da Mesa</Label>
-                            <Input id="numero_mesa" {...register("numero_mesa")} />
+                            <Input id="numero_mesa" {...register("numero_mesa", { valueAsNumber: true })} />
                             <p>{errors.numero_mesa?.message}</p>
                         </Field>
                     </FieldGroup>

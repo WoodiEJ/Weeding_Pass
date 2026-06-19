@@ -1,5 +1,6 @@
 import { listarConvidados } from "@/actions/convidados";
 import { columnConvidado } from "@/components/columnsConvidado";
+import { columnConvidadoRecep } from "@/components/columnsConvidadoRecep";
 import { DataTable } from "@/components/data-table";
 
 export default async function Convidados() {
@@ -11,7 +12,7 @@ export default async function Convidados() {
                 <h1 className="text-2xl font-semibold">Usuários</h1>
 
             </div>
-            <DataTable columns={columnConvidado} data={convidados} />
+            <DataTable columns={columnConvidadoRecep} data={convidados} />
         </div>
     )
 }

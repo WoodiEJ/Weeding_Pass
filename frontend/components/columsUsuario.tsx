@@ -13,6 +13,7 @@ export type Usuario = {
     nome: string
     cpf: string
     email: string
+    senha: string
     role: "ADMIN" | "RECEP"
 }
 
@@ -93,7 +94,7 @@ export const columnUsuario: ColumnDef<Usuario>[] = [
                             nome: row.original.nome,
                             cpf: row.original.cpf,
                             email: row.original.email,
-                            senha: "",
+                            senha: row.original.senha,
                             role: row.original.role
                         }}
                     />

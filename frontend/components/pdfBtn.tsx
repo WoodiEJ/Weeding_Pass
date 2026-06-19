@@ -19,7 +19,7 @@ export function BotaoGerarRelatorio({ convidados }: { convidados: any[] }) {
 
         autoTable(documento, {
             startY: 35,
-            head: [['ID', 'NOME', 'SOBRENOME', 'CPF', 'TELEFONE', 'EMAIL', 'NUMERO DA MESA', 'PRESEÇA']],
+            head: [['ID', 'NOME', 'SOBRENOME', 'CPF', 'TELEFONE', 'EMAIL', 'NUMERO DA MESA', 'PRESENÇA']],
             body: linhas
         });
 
@@ -40,5 +40,5 @@ export function BotaoGerarRelatorio({ convidados }: { convidados: any[] }) {
         });
     }
 
-    return <Button onClick={confirmar} size="sm">Gerar relatório completo</Button>;
+    return <Button variant="outline" onClick={confirmar} size="sm">Gerar relatório completo</Button>;
 }

@@ -142,9 +142,16 @@ export async function editarUsuario(req: Request, res: Response) {
             })
         }
 
+        const {nome, cpf, email, role } = result.data
         await prisma.usuarios.update({
             where: { id },
-            data: result.data
+            data: {
+                nome: nome, 
+                cpf: cpf,
+                email: email,
+                senha: usuario.senha,
+                role: role
+            }
         })
         return res.status(200).json({
             success: true, 

@@ -76,7 +76,8 @@ export async function registrarConvidado(req: Request, res: Response) {
         const { nome, sobrenome, cpf, telefone, email, numero_mesa } = result.data
         const convidadoExiste = await prisma.convidados.findFirst({
             where: {
-                email: email
+                email: email,
+                cpf: cpf
             }
         })
 

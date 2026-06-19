@@ -93,11 +93,6 @@ export function DialogAtualizarUsuario({ id, dados }: { id: string, dados: FormD
                             <Input id="email" {...register("email")} />
                             <p>{errors.email?.message}</p>
                         </Field>
-                        <Field>
-                            <Label>Senha</Label>
-                            <Input id="senha" {...register("senha")} />
-                            <p>{errors.senha?.message}</p>
-                        </Field>
                         <Controller
                             control={control}
                             name="role"
